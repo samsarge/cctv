@@ -1,0 +1,12 @@
+GEM
+  specs:
+    ruby-opencv (0.0.18)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  ruby-opencv
+
+BUNDLED WITH
+   1.16.5
