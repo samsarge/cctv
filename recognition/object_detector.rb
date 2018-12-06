@@ -2,7 +2,7 @@
 
 module Recognition
   class ObjectDetector
-    def initialize(dataset = 'haarcascade_frontalface_alt.xml.gz')
+    def initialize(dataset = 'datasets/haarcascade_frontalface_alt.xml.gz')
       @classifier = OpenCV::CvHaarClassifierCascade.load(dataset)
       @objects_detected = 0
       @frames_objects_detected_for = 0
