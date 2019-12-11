@@ -14,8 +14,16 @@ module Recognition
       loop do
         image = @webcam.take_photo
         @detector.call(image)
+
+
+        @detector.frames << @detector.objects_detected?
+
         if @detector.objects_detected? && @detector.objected_detected_for_frame_threshold?
+          puts "DETECTION LOCK ON"
           save_image_to_captures(image)
+          @detection_lock = true
+        else
+          return lock! if lock_pc?
         end
 
         @window.show image
@@ -26,6 +34,16 @@ module Recognition
     end
 
     private
+
+    def lock!
+      puts 'LOCKING'
+      Kernel.exec('/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend')
+      exit 1
+    end
+
+    def lock_pc?
+      !@detector.objects_detected? && @detection_lock && @detector.lock_pc?
+    end
 
     def notify_startup
       puts 'Starting...'

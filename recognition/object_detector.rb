@@ -6,9 +6,12 @@ module Recognition
       @classifier = OpenCV::CvHaarClassifierCascade.load(dataset)
       @objects_detected = 0
       @frames_objects_detected_for = 0
+      @frames = []
     end
 
     attr_reader :frames_objects_detected_for, :objects_detected
+
+    attr_accessor :frames
 
     def call(img)
       cv_seq = @classifier.detect_objects(img) do |rect|
@@ -17,6 +20,11 @@ module Recognition
       end
       @objects_detected = cv_seq.length
       self
+    end
+
+    def lock_pc?
+      frame_count = Recognition::Constants::AMOUNT_OF_FRAMES_BEFORE_LOCK
+      @frames.last(frame_count) == Array.new(frame_count, false)
     end
 
     def objects_detected?
